@@ -4,5 +4,9 @@
 using namespace std;
 
 int main() {
-    cout << max("a", "d") << "\n";
+    bool cond = false;
+    if ('z' < 'a') {
+        cond = true;
+    }
+    cout << cond << "\n";
 }
