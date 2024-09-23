@@ -3,7 +3,6 @@
 using namespace std;
 
 double getNumBits(int nC2) {
-    if (nC2 == 0) return 0;
     double res = (1 + sqrt(1 + 8 * nC2)) / 2;
     if (res == floor(res)) {
         return res;
@@ -19,33 +18,41 @@ int main() {
     cin >> c;
     cin >> d;
 
+    if (a == 0 && b == 0 && c == 0 && d == 0) {
+        cout << "1\n";
+        return 0;
+    }
+
     int num0Bits = getNumBits(a);
     int num1Bits = getNumBits(d);
 
-    if (num0Bits == -1 || num1Bits == -1) {
+    if (num0Bits == -1 || num1Bits == -1 || num0Bits * num1Bits != b + c) {
         cout << "impossible\n";
         return 0;
     }
-    if (num0Bits == 0 && num1Bits > 0) {
-        num0Bits = 1;
-    } else if (num1Bits == 0 && num0Bits > 0) {
-        num1Bits = 1;
-    } else if (num0Bits * num1Bits != b + c) {
-        cout << "impossible\n";
-        return 0;
-    } 
-    cout << "num0bits: " << num0Bits << " num1bits: " << num1Bits << "\n";
+    // cout << "num0bits: " << num0Bits << " num1bits: " << num1Bits << "\n";
 
     vector<int> bitstring;
-    for (int i = 0; i < num0Bits; i++) {
-        bitstring.insert(bitstring.begin() + i, 0);
+    while (num0Bits > 0 || num1Bits > 0) {
+        if (num1Bits == 0) {
+            bitstring.push_back(0);
+            num0Bits--;
+        } if (num0Bits == 0) {
+            bitstring.push_back(1);
+            num1Bits--;
+        } else if ((b > c && b >= num1Bits) || (c > b && c < num1Bits)) {
+            bitstring.push_back(0);
+            num0Bits--;
+            b -= num1Bits;
+        } else {
+            bitstring.push_back(1);
+            num1Bits--;
+            c -= num0Bits;
+        }
     }
 
-    int currFreq_1 = 0;
-    while (currFreq_1 < num1Bits) {
-        
+    for (auto i : bitstring) {
+        cout << i;
     }
-
-    cout << "possible\n";
-
+    cout << "\n";
 }
